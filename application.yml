@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: forage-midas
+  profiles:
+    active: dev  # Set active profile (e.g., dev, test, prod)
+
+  datasource:
+    url: jdbc:h2:mem:testdb  # H2 database for testing
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+    platform: h2
+    initialize: true
+    ddl-auto: update
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # Set to validate, create-drop, or none as appropriate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+# Kafka configuration
+kafka:
+  bootstrap-servers: localhost:9092
+  topic: forage-midas-topic  # Replace with actual topic name
+  consumer:
+    group-id: forage-midas-consumer
+    auto-offset-reset: earliest
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  listener:
+    concurrency: 3
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.jpmc.midascore: DEBUG  # Customize logging for your package
+
+# Custom properties used in application
+general:
+  kafka-topic: forage-midas-topic  # Match this to the kafka.topic property or any other required
+
+server:
+  port: 8080
+  servlet:
+    context-path: /forage-midas
